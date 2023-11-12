@@ -88,6 +88,7 @@ const Footer = styled.footer`
 const Sidebar = styled.div<{ isOpen: boolean }>`
   width: 400px;
   height: 100%;
+  font-family: Montserrat;
   background-color: #0f52ba;
   position: fixed;
   top: 0;
@@ -97,6 +98,10 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   flex-direction: column;
 `;
 
+const HeaderSidebar = styled.div`
+  flex-direction: row;
+`;
+
 const CartItem = styled.div`
   margin-bottom: 10px;
 `;
@@ -104,6 +109,8 @@ const CartItem = styled.div`
 const CloseButton = styled.button`
   background-color: black;
   color: white;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -165,6 +172,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
           <strong>MKS</strong>
           <p>Sistemas</p>
         </TitleStore>
+
         <CartButton onClick={toggleSidebar}>
           <CartIcon>
             <FontAwesomeIcon icon={faShoppingCart} />
@@ -188,13 +196,16 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
       </Footer>
 
       <Sidebar isOpen={isSidebarOpen}>
-        <h2>Carrinho</h2>
-        <CloseButton onClick={() => setIsSidebarOpen(false)}>X</CloseButton>
+        <HeaderSidebar>
+          <h2>Carrinho de Compras</h2>
+          <CloseButton onClick={() => setIsSidebarOpen(false)}>X</CloseButton>
+        </HeaderSidebar>
+
         {cart.map((item, index) => (
           <CartItem key={index}>
             <p>{item.name}</p>
             <CloseButton onClick={() => removeFromCart(item.id)}>X</CloseButton>
-          </CartItem>
+          </CartItem> 
         ))}
         <CheckoutButton onClick={handleCheckout}>Finalizar Compra</CheckoutButton>
       </Sidebar>
