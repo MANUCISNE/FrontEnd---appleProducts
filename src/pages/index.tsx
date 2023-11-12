@@ -69,17 +69,15 @@ const Footer = styled.footer`
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
-  width: 300px;
+  width: 400px;
   height: 100%;
-  background-color: lightgray;
+  background-color: #0f52ba;
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? '0' : '-300px')};
+  right: ${({ isOpen }) => (isOpen ? '0' : '-400px')};
   transition: right 0.3s ease;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 `;
 
 const CartItem = styled.div`
@@ -87,21 +85,23 @@ const CartItem = styled.div`
 `;
 
 const CloseButton = styled.button`
-  background-color: transparent;
+  background-color: black;
+  color: white;
+  border-radius: 50%;
   border: none;
   cursor: pointer;
-  color: blue;
-  font-size: 14px;
-  margin-bottom: 10px;
+  font-size: 20px;
 `;
 
 const CheckoutButton = styled.button`
-  background-color: green;
+  background-color: black;
   color: white;
-  padding: 10px;
+  padding: 20px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 25px;
+  width: 400px;
+  margin-top: auto; 
 `;
 
 const HomeProducts: React.FC<HomeProductsProps> = () => {
@@ -169,10 +169,11 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
 
       <Sidebar isOpen={isSidebarOpen}>
         <h2>Carrinho</h2>
+        <CloseButton onClick={() => setIsSidebarOpen(false)}>X</CloseButton>
         {cart.map((item, index) => (
           <CartItem key={index}>
             <p>{item.name}</p>
-            <CloseButton onClick={() => removeFromCart(item.id)}>Fechar</CloseButton>
+            <CloseButton onClick={() => removeFromCart(item.id)}>X</CloseButton>
           </CartItem>
         ))}
         <CheckoutButton onClick={handleCheckout}>Finalizar Compra</CheckoutButton>
