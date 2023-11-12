@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faContactBook } from '@fortawesome/free-solid-svg-icons/faContactBook';
 
 interface Product {
   id: number;
@@ -15,15 +16,26 @@ interface HomeProductsProps {}
 
 const Header = styled.header`
   background-color: #0f52ba;
-  padding: 10px;
+  padding: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const LogoImage = styled.img`
-  width: 100px;
-  height: 100px;
+const TitleStore = styled.div`
+  display: flex;
+  gap: .5rem;
+  font-family: Montserrat;
+  align-items: center;
+
+  strong {
+    font-size: 2.5rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+    font-weight: 100;
+  }
 `;
 
 const CartButton = styled.button`
@@ -33,7 +45,7 @@ const CartButton = styled.button`
   cursor: pointer;
   color: black; 
   font-size: 16px;
-  padding: 15px;
+  padding: 13px;
   border-radius: 15px; 
   align-items: center;
 `;
@@ -44,6 +56,9 @@ const CartIcon = styled.span`
 `;
 
 const Body = styled.div`
+  background-color: white;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -66,6 +81,8 @@ const Footer = styled.footer`
   bottom: 0;
   width: 100%;
   color: black;
+  font-family: Montserrat;
+  font-size: 0.75rem; 
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
@@ -144,7 +161,10 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
   return (
     <div>
       <Header>
-        <LogoImage src="caminho/para/sua/imagem.png" alt="Logo da loja" />
+        <TitleStore>
+          <strong>MKS</strong>
+          <p>Sistemas</p>
+        </TitleStore>
         <CartButton onClick={toggleSidebar}>
           <CartIcon>
             <FontAwesomeIcon icon={faShoppingCart} />
