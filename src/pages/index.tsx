@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { faContactBook } from "@fortawesome/free-solid-svg-icons/faContactBook";
 import Image from "next/image";
 import QuantityControl from "@/components/QuantityControl";
 interface Product {
@@ -134,7 +133,7 @@ const TitlePriceContainer = styled.div`
   color: #2c2c2c;
   display: flex;
   justify-content: space-between;
-  gap: 3rem;
+  gap: 2rem;
 
   h3 {
     text-align: start;
@@ -214,11 +213,13 @@ const CartItem = styled.div`
   border-radius: 5px;
   color: black;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
   margin: 1.3rem;
-  padding: 8px;
+
+  p {
+    width: 4.5rem;
+  }
 `;
 
 const ProductImageCart = styled.img`
@@ -395,10 +396,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
                 onIncrease={() => increaseQuantity(item)}
                 onDecrease={() => decreaseQuantity(item)}
               />
-              <strong>
-                <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
-              </strong>
-
+              <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
             </CartItem>
             <CloseButtonCart onClick={() => removeFromCart(item.id)}>
               X
