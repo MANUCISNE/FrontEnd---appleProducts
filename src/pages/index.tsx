@@ -21,6 +21,10 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 375px) {
+    height: 5rem;
+  }
 `;
 
 const TitleStore = styled.div`
@@ -66,6 +70,12 @@ const Body = styled.div`
   height: 100vh;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 375px) {
+    overflow: auto; 
+    height: 100%;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ProductContainer = styled.div`
@@ -74,6 +84,11 @@ const ProductContainer = styled.div`
   height: 38rem;
   display: flex;
   padding-bottom: 0;
+
+  @media (max-width: 375px) {
+    width: 70%;
+    height: 100%;
+  }
 `;
 
 const ProductColumn = styled.div`
@@ -309,7 +324,6 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
 
   const handleCheckout = () => {
     // Adicione a lógica para finalizar a compra, por exemplo, enviar a lista de produtos ao backend.
-    //console.log('Compra finalizada:', cart);
   };
 
   return (
