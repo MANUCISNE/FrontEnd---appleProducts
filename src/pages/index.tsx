@@ -56,21 +56,38 @@ const CartIcon = styled.span`
 `;
 
 const Body = styled.div`
-  background-color: white;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  background-color: #f9f9f9;
+  color: black;
   padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
 `;
 
+const ProductContainer = styled.div`
+  width: 65rem;
+  flex-wrap: wrap;
+  height: 38rem;
+  display: flex;
+`
+
 const ProductColumn = styled.div`
-  width: 30%;
-  margin: 10px;
+  background-color: white;
+  border-radius: 10px;
+  width: 15rem;
+  height: 18rem;
+  margin: 6px;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
+`;
+
+const ProductImage = styled.img`
+  width: 8rem;
+  height: 7.5rem;
 `;
 
 const Footer = styled.footer`
@@ -96,6 +113,11 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 375px) {
+    width: 90%; 
+    border-radius: 0; 
+  }
 `;
 
 const HeaderSidebar = styled.div`
@@ -129,16 +151,16 @@ const CheckoutButton = styled.button`
 `;
 
 const HomeProducts: React.FC<HomeProductsProps> = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product>([]);
+  const [cart, setCart] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/products');
+        const response = await fetch('https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/v1/products?page=1&rows=8&sortBy=id&orderBy=DESC');
         const data = await response.json();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
       }
@@ -147,7 +169,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
     fetchData();
   }, []);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: any) => {
     setCart([...cart, product]);
   };
 
@@ -162,7 +184,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
 
   const handleCheckout = () => {
     // Adicione a lógica para finalizar a compra, por exemplo, enviar a lista de produtos ao backend.
-    console.log('Compra finalizada:', cart);
+    //console.log('Compra finalizada:', cart);
   };
 
   return (
@@ -182,13 +204,17 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
       </Header>
 
       <Body>
-        {products.map((product, index) => (
-          <ProductColumn key={index}>
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <button onClick={() => addToCart(product)}>Comprar</button>
-          </ProductColumn>
-        ))}
+        <ProductContainer>
+          {products.map((product) => (
+              <ProductColumn key={product.id}>
+                <ProductImage src={product.photo} alt={product.name} />
+                <h3>{product.name}</h3>
+                <p>{product.description}</p>
+                <p>{`R$ ${product.price}`}</p>
+                <button onClick={() => addToCart(product)}    >Comprar</button>
+              </ProductColumn>
+          ))}
+        </ProductContainer>
       </Body>
 
       <Footer>
