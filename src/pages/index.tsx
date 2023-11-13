@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { faContactBook } from '@fortawesome/free-solid-svg-icons/faContactBook';
-
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faContactBook } from "@fortawesome/free-solid-svg-icons/faContactBook";
+import Image from 'next/image'
 interface Product {
   id: number;
   name: string;
@@ -24,7 +24,7 @@ const Header = styled.header`
 
 const TitleStore = styled.div`
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   font-family: Montserrat;
   align-items: center;
 
@@ -39,20 +39,20 @@ const TitleStore = styled.div`
 `;
 
 const CartButton = styled.button`
-  background-color: white; 
+  background-color: white;
   width: 80px;
   border: none;
   cursor: pointer;
-  color: black; 
+  color: black;
   font-size: 16px;
   padding: 13px;
-  border-radius: 15px; 
+  border-radius: 15px;
   align-items: center;
 `;
 
 const CartIcon = styled.span`
   margin-right: 15px;
-  color: black; 
+  color: black;
 `;
 
 const Body = styled.div`
@@ -72,7 +72,7 @@ const ProductContainer = styled.div`
   flex-wrap: wrap;
   height: 38rem;
   display: flex;
-`
+`;
 
 const ProductColumn = styled.div`
   background-color: white;
@@ -81,13 +81,51 @@ const ProductColumn = styled.div`
   height: 18rem;
   margin: 6px;
   border: 1px solid #ccc;
-  padding: 5px;
+  padding: 15px;
   text-align: center;
+  margin-top: auto;
 `;
 
 const ProductImage = styled.img`
   width: 8rem;
   height: 7.5rem;
+`;
+
+const DescriptionContainer = styled.div`
+  font-family: Montserrat;
+  font-size: 0.625rem;
+`;
+
+const TitlePriceContainer = styled.div`
+  border-radius: 10px;
+  font-family: Montserrat;
+  display: flex;
+  justify-content: space-between;
+
+  h3 {
+    justify-content: flex-start;
+  }
+
+  p {
+    background-color: black;
+    border-radius: 5px;
+    width: 4.4rem;
+    height: 1.6rem;
+    color: white;
+  }
+`;
+
+const ContainerButton = styled.div`
+  font-family: Montserrat;
+  background-color: #0f52ba;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  gap: 10px;
+`;
+
+const ButtonCard = styled.div`
 `;
 
 const Footer = styled.footer`
@@ -99,7 +137,7 @@ const Footer = styled.footer`
   width: 100%;
   color: black;
   font-family: Montserrat;
-  font-size: 0.75rem; 
+  font-size: 0.75rem;
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
@@ -109,19 +147,25 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   background-color: #0f52ba;
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? '0' : '-400px')};
+  right: ${({ isOpen }) => (isOpen ? "0" : "-400px")};
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
 
   @media (max-width: 375px) {
-    width: 90%; 
-    border-radius: 0; 
+    width: 90%;
+    border-radius: 0;
   }
 `;
 
 const HeaderSidebar = styled.div`
-  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
+  padding: 2.5rem;
+
+  h2 {
+    width: 10rem;
+  }
 `;
 
 const CartItem = styled.div`
@@ -147,7 +191,7 @@ const CheckoutButton = styled.button`
   cursor: pointer;
   font-size: 25px;
   width: 400px;
-  margin-top: auto; 
+  margin-top: auto;
 `;
 
 const HomeProducts: React.FC<HomeProductsProps> = () => {
@@ -158,11 +202,13 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/v1/products?page=1&rows=8&sortBy=id&orderBy=DESC');
+        const response = await fetch(
+          "https://mks-frontend-challenge-04811e8151e6.herokuapp.com/api/v1/products?page=1&rows=8&sortBy=id&orderBy=DESC"
+        );
         const data = await response.json();
         setProducts(data.products);
       } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
+        console.error("Erro ao buscar produtos:", error);
       }
     };
 
@@ -174,7 +220,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
   };
 
   const removeFromCart = (productId: number) => {
-    const updatedCart = cart.filter(item => item.id !== productId);
+    const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
   };
 
@@ -205,21 +251,28 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
 
       <Body>
         <ProductContainer>
-          {products.map((product) => (
-              <ProductColumn key={product.id}>
-                <ProductImage src={product.photo} alt={product.name} />
+          {products.map((product: any) => (
+            <ProductColumn key={product.id}>
+              <ProductImage src={product.photo} alt={product.name} />
+              <TitlePriceContainer>
                 <h3>{product.name}</h3>
-                <p>{product.description}</p>
-                <p>{`R$ ${product.price}`}</p>
-                <button onClick={() => addToCart(product)}    >Comprar</button>
-              </ProductColumn>
+                <strong><p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p></strong>
+              </TitlePriceContainer>
+              <DescriptionContainer>{product.description}</DescriptionContainer>
+              <ContainerButton>
+                <Image
+                    src="./shopping-bag.svg"
+                    alt=""
+                    width={18}
+                    height={18} />
+                <ButtonCard onClick={() => addToCart(product)}>COMPRAR</ButtonCard>
+              </ContainerButton>
+            </ProductColumn>
           ))}
         </ProductContainer>
       </Body>
 
-      <Footer>
-        MKS sistemas © Todos os direitos reservados
-      </Footer>
+      <Footer>MKS sistemas © Todos os direitos reservados</Footer>
 
       <Sidebar isOpen={isSidebarOpen}>
         <HeaderSidebar>
@@ -231,9 +284,11 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
           <CartItem key={index}>
             <p>{item.name}</p>
             <CloseButton onClick={() => removeFromCart(item.id)}>X</CloseButton>
-          </CartItem> 
+          </CartItem>
         ))}
-        <CheckoutButton onClick={handleCheckout}>Finalizar Compra</CheckoutButton>
+        <CheckoutButton onClick={handleCheckout}>
+          Finalizar Compra
+        </CheckoutButton>
       </Sidebar>
     </div>
   );
