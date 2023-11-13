@@ -13,7 +13,7 @@ const QuantityControlWrapper = styled.div`
 const QuantityButton = styled.button`
   background-color: transparent;
   color: black;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   border: none;
   cursor: pointer;
 `;

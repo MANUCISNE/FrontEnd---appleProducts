@@ -264,8 +264,15 @@ const CheckoutButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 25px;
-  width: 400px;
+  width: 450px;
   margin-top: auto;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 375px) {
+    text-align: center; 
+    width: 100%;
+  }
 `;
 
 const HomeProducts: React.FC<HomeProductsProps> = () => {
