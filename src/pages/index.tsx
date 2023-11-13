@@ -69,7 +69,7 @@ const Body = styled.div`
   justify-content: center;
 
   @media (max-width: 375px) {
-    overflow: auto; 
+    overflow: auto;
     height: 100%;
     margin-bottom: 2rem;
   }
@@ -140,9 +140,11 @@ const TitlePriceContainer = styled.div`
   p {
     background-color: black;
     border-radius: 5px;
-    width: 4.4rem;
-    height: 1.6rem;
+    align-items: center;
+    width: 4.6rem;
+    height: 1.4rem;
     color: white;
+    padding: 2px;
   }
 `;
 
@@ -183,7 +185,7 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   background-color: #0f52ba;
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? "0" : "-400px")};
+  right: ${({ isOpen }) => (isOpen ? "0" : "-450px")};
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -216,8 +218,11 @@ const CartItem = styled.div`
   margin: 1.3rem;
 
   p {
-    width: 4.5rem;
+    font-weight: 700;
   }
+`;
+const ContainerNameImage = styled.img`
+  display: flex;
 `;
 
 const ProductImageCart = styled.img`
@@ -268,7 +273,7 @@ const CheckoutButton = styled.button`
   justify-content: center;
 
   @media (max-width: 375px) {
-    text-align: center; 
+    text-align: center;
     width: 100%;
   }
 `;
@@ -301,7 +306,7 @@ const HomeProducts: React.FC = () => {
       )
     );
   };
-  
+
   const decreaseQuantity = (productId: any) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -318,7 +323,9 @@ const HomeProducts: React.FC = () => {
     if (existingItem) {
       setCart((prevCart) =>
         prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         )
       );
     } else {
@@ -363,13 +370,13 @@ const HomeProducts: React.FC = () => {
               <ProductInformation>
                 <TitlePriceContainer>
                   <h3>{product.name}</h3>
-                  <strong>
-                    <p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p>
-                  </strong>
+                  <strong><p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p></strong>
+                  
+                  
                 </TitlePriceContainer>
                 <DescriptionContainer>
                   {product.description}
-                </DescriptionContainer>
+                </DescriptionContainer> 
               </ProductInformation>
 
               <ContainerButton>
@@ -394,8 +401,9 @@ const HomeProducts: React.FC = () => {
         {cart.map((item, index) => (
           <div key={index}>
             <CartItem>
-              <ProductImageCart src={item.photo} alt={item.name} />
-              <p>{item.name}</p>
+              <ProductImageCart src={item.photo} alt={item.name} title={item.name} />
+              <div>{item.name}</div>
+
               <QuantityControl
                 quantity={item.quantity}
                 onIncrease={() => increaseQuantity(item)}
