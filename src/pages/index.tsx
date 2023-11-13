@@ -181,16 +181,17 @@ const Footer = styled.footer`
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
-  width: 450px;
+  width: 480px;
   height: 100%;
   font-family: Montserrat;
   background-color: #0f52ba;
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? "0" : "-450px")};
+  right: ${({ isOpen }) => (isOpen ? "0" : "-480px")};
   transition: right 0.3s ease;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 
   @media (max-width: 375px) {
     width: 85%;
@@ -201,7 +202,7 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
 const HeaderSidebar = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 2.5rem;
+  padding: 2rem;
 
   h2 {
     width: 10rem;
@@ -209,8 +210,7 @@ const HeaderSidebar = styled.div`
 `;
 
 const CartItem = styled.div`
-  margin-bottom: 10px;
-  height: 6rem;
+  height: 7rem;
   background-color: white;
   border-radius: 5px;
   color: black;
@@ -218,19 +218,59 @@ const CartItem = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 1.3rem;
+  padding: 23px;
   font-weight: 400;
 
-  p {
-    font-weight: 700;
+  @media (max-width: 375px) {
+    flex-direction: column;
+    padding: 8px;
+    height: 13rem;
+    width: 15rem;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    gap: 0.5rem;
   }
-`;
-const ContainerNameImage = styled.img`
-  display: flex;
 `;
 
 const ProductImageCart = styled.img`
   width: 4.2rem;
   height: 3.5rem;
+
+  @media (max-width: 375px) {
+    width: 7rem;
+    height: 6rem;
+  }
+`;
+
+const ItemName = styled.div`
+  width: 7rem;
+
+  @media (max-width: 375px) {
+    width: 15rem;
+    text-align: center;
+  }
+`;
+
+const MobileFlexContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.8rem;
+`;
+
+const PriceCart = styled.div`
+  font-weight: 700;
+
+  @media (max-width: 375px) {
+    background-color: black;
+    border-radius: 5px;
+    text-align: center;
+    width: 5rem;
+    height: 2rem;
+    color: white;
+    padding: 4px;
+  }
 `;
 
 const CloseButtonCart = styled.button`
@@ -239,8 +279,8 @@ const CloseButtonCart = styled.button`
   width: 1.14rem;
   height: 1.14rem;
   position: relative;
-  left: 26rem;
-  bottom: 7.7rem;
+  left: 28rem;
+  bottom: 8.8rem;
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -249,6 +289,16 @@ const CloseButtonCart = styled.button`
   @media (max-width: 375px) {
     position: relative;
     left: 18rem;
+  }
+`;
+
+const FooterSidebar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+
+  h2 {
+    width: 10rem;
   }
 `;
 
@@ -270,7 +320,7 @@ const CheckoutButton = styled.button`
   border: none;
   cursor: pointer;
   font-size: 25px;
-  width: 450px;
+  width: 480px;
   margin-top: auto;
   display: flex;
   justify-content: center;
@@ -355,11 +405,13 @@ const HomeProducts: React.FC = () => {
               <ProductInformation>
                 <TitlePriceContainer>
                   <h3>{product.name}</h3>
-                  <strong><p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p></strong>
+                  <strong>
+                    <p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p>
+                  </strong>
                 </TitlePriceContainer>
                 <DescriptionContainer>
                   {product.description}
-                </DescriptionContainer> 
+                </DescriptionContainer>
               </ProductInformation>
 
               <ContainerButton>
@@ -384,15 +436,23 @@ const HomeProducts: React.FC = () => {
         {cart.map((item, index) => (
           <div key={index}>
             <CartItem>
-              <ProductImageCart src={item.photo} alt={item.name} title={item.name} />
-              <div>{item.name}</div>
-
-              <QuantityControl
-                quantity={item.quantity}
-                onIncrease={() => addToCart(item)}
-                onDecrease={() => removeFromCart(item - 1)}
+              <ProductImageCart
+                src={item.photo}
+                alt={item.name}
+                title={item.name}
               />
-              <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
+              <ItemName>{item.name}</ItemName>
+
+              <MobileFlexContainer>
+                <QuantityControl
+                  quantity={item.quantity}
+                  onIncrease={() => addToCart(item)}
+                  onDecrease={() => removeFromCart(item.quantity - 1)}
+                />
+                <PriceCart>{`R$ ${parseFloat(item.price).toFixed(
+                  0
+                )}`}</PriceCart>
+              </MobileFlexContainer>
             </CartItem>
             <CloseButtonCart onClick={() => removeFromCart(item.id)}>
               X
@@ -400,6 +460,9 @@ const HomeProducts: React.FC = () => {
           </div>
         ))}
 
+        <FooterSidebar>
+          <h2>Total: </h2>
+        </FooterSidebar>
         <CheckoutButton onClick={handleCheckout}>
           Finalizar Compra
         </CheckoutButton>
