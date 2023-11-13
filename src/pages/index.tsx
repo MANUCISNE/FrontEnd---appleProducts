@@ -273,7 +273,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
       )
     );
   };
-
+  
   const decreaseQuantity = (productId) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -288,14 +288,12 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
     const existingItem = cart.find((item) => item.id === product.id);
 
     if (existingItem) {
-      // Se o item já existe no carrinho, aumente a quantidade
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         )
       );
     } else {
-      // Se o item ainda não está no carrinho, adicione-o com uma quantidade inicial de 1
       setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
     }
   };
