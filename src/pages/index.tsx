@@ -180,7 +180,7 @@ const Footer = styled.footer`
 `;
 
 const Sidebar = styled.div<{ isOpen: boolean }>`
-  width: 400px;
+  width: 450px;
   height: 100%;
   font-family: Montserrat;
   background-color: #0f52ba;
@@ -192,7 +192,7 @@ const Sidebar = styled.div<{ isOpen: boolean }>`
   flex-direction: column;
 
   @media (max-width: 375px) {
-    width: 90%;
+    width: 85%;
     border-radius: 0;
   }
 `;
@@ -214,9 +214,11 @@ const CartItem = styled.div`
   border-radius: 5px;
   color: black;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
   margin: 1.3rem;
-  padding: 10px;
+  padding: 8px;
 `;
 
 const ProductImageCart = styled.img`
@@ -230,12 +232,17 @@ const CloseButtonCart = styled.button`
   width: 1.14rem;
   height: 1.14rem;
   position: relative;
-  left: 23rem;
+  left: 26rem;
   bottom: 7.7rem;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   font-size: 11px;
+
+  @media (max-width: 375px) {
+    position: relative;
+    left: 18rem;
+  }
 `;
 
 const CloseButton = styled.button`
