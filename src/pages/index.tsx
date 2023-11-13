@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { faContactBook } from "@fortawesome/free-solid-svg-icons/faContactBook";
-import Image from 'next/image'
+import Image from "next/image";
+import QuantityControl from "@/components/QuantityControl";
 interface Product {
   id: number;
   name: string;
@@ -72,38 +73,56 @@ const ProductContainer = styled.div`
   flex-wrap: wrap;
   height: 38rem;
   display: flex;
+  padding-bottom: 0;
 `;
 
 const ProductColumn = styled.div`
   background-color: white;
   border-radius: 10px;
-  width: 15rem;
+  width: 14rem;
   height: 18rem;
   margin: 6px;
-  border: 1px solid #ccc;
-  padding: 15px;
   text-align: center;
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  padding-top: 2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ProductImage = styled.img`
   width: 8rem;
   height: 7.5rem;
+  text-align: center;
+`;
+
+const ProductInformation = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  gap: 10px;
 `;
 
 const DescriptionContainer = styled.div`
   font-family: Montserrat;
   font-size: 0.625rem;
+  color: #2c2c2c;
+  text-align: start;
 `;
 
 const TitlePriceContainer = styled.div`
   border-radius: 10px;
   font-family: Montserrat;
+  color: #2c2c2c;
   display: flex;
   justify-content: space-between;
+  gap: 3rem;
 
   h3 {
-    justify-content: flex-start;
+    text-align: start;
   }
 
   p {
@@ -121,11 +140,16 @@ const ContainerButton = styled.div`
   color: white;
   display: flex;
   justify-content: center;
-  padding: 5px;
+  padding: 5px 0;
   gap: 10px;
+  width: 100%;
+  cursor: pointer;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 `;
 
 const ButtonCard = styled.div`
+  font-weight: 700;
 `;
 
 const Footer = styled.footer`
@@ -170,6 +194,33 @@ const HeaderSidebar = styled.div`
 
 const CartItem = styled.div`
   margin-bottom: 10px;
+  height: 6rem;
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  margin: 1.3rem;
+  padding: 10px;
+`;
+
+const ProductImageCart = styled.img`
+  width: 4.2rem;
+  height: 3.5rem;
+`;
+
+const CloseButtonCart = styled.button`
+  background-color: black;
+  color: white;
+  width: 1.14rem;
+  height: 1.14rem;
+  position: relative;
+  left: 23rem;
+  bottom: 7.7rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
 `;
 
 const CloseButton = styled.button`
@@ -215,8 +266,38 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
     fetchData();
   }, []);
 
+  const increaseQuantity = (productId) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  const decreaseQuantity = (productId) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
   const addToCart = (product: any) => {
-    setCart([...cart, product]);
+    const existingItem = cart.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      // Se o item já existe no carrinho, aumente a quantidade
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+    } else {
+      // Se o item ainda não está no carrinho, adicione-o com uma quantidade inicial de 1
+      setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
+    }
   };
 
   const removeFromCart = (productId: number) => {
@@ -254,18 +335,23 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
           {products.map((product: any) => (
             <ProductColumn key={product.id}>
               <ProductImage src={product.photo} alt={product.name} />
-              <TitlePriceContainer>
-                <h3>{product.name}</h3>
-                <strong><p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p></strong>
-              </TitlePriceContainer>
-              <DescriptionContainer>{product.description}</DescriptionContainer>
+              <ProductInformation>
+                <TitlePriceContainer>
+                  <h3>{product.name}</h3>
+                  <strong>
+                    <p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p>
+                  </strong>
+                </TitlePriceContainer>
+                <DescriptionContainer>
+                  {product.description}
+                </DescriptionContainer>
+              </ProductInformation>
+
               <ContainerButton>
-                <Image
-                    src="./shopping-bag.svg"
-                    alt=""
-                    width={18}
-                    height={18} />
-                <ButtonCard onClick={() => addToCart(product)}>COMPRAR</ButtonCard>
+                <Image src="./shopping-bag.svg" alt="" width={16} height={16} />
+                <ButtonCard onClick={() => addToCart(product)}>
+                  COMPRAR
+                </ButtonCard>
               </ContainerButton>
             </ProductColumn>
           ))}
@@ -281,11 +367,25 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
         </HeaderSidebar>
 
         {cart.map((item, index) => (
-          <CartItem key={index}>
-            <p>{item.name}</p>
-            <CloseButton onClick={() => removeFromCart(item.id)}>X</CloseButton>
-          </CartItem>
+          <div key={index}>
+            <CartItem>
+              <ProductImageCart src={item.photo} alt={item.name} />
+              <p>{item.name}</p>
+              <strong>
+                <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
+              </strong>
+              <QuantityControl
+                quantity={item.quantity}
+                onIncrease={() => increaseQuantity(item)}
+                onDecrease={() => decreaseQuantity(item)}
+              />
+            </CartItem>
+            <CloseButtonCart onClick={() => removeFromCart(item.id)}>
+              X
+            </CloseButtonCart>
+          </div>
         ))}
+
         <CheckoutButton onClick={handleCheckout}>
           Finalizar Compra
         </CheckoutButton>
