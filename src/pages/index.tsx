@@ -288,7 +288,11 @@ const CloseButtonCart = styled.button`
 
   @media (max-width: 375px) {
     position: relative;
-    left: 18rem;
+    left: 14.18rem;
+    bottom: 13.5rem;
+    background-color: transparent;
+    font-size: 30px;
+    color: black;
   }
 `;
 
@@ -299,6 +303,11 @@ const FooterSidebar = styled.div`
 
   h2 {
     width: 10rem;
+  }
+
+  p {
+    font-weight: 700;
+    font-size: 1.4rem;
   }
 `;
 
@@ -333,7 +342,7 @@ const CheckoutButton = styled.button`
 
 const HomeProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<any>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -368,6 +377,13 @@ const HomeProducts: React.FC = () => {
     }
   };
 
+  const decreaseFromCart = (productId: number) => {
+    const updatedCart = cart.map((item: any) =>
+    item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+    );
+  setCart(updatedCart);
+  };
+
   const removeFromCart = (productId: number) => {
     const updatedCart = cart.filter((item) => item.id !== productId);
     setCart(updatedCart);
@@ -377,8 +393,10 @@ const HomeProducts: React.FC = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleCheckout = () => {
-    // Adicione a lógica para finalizar a compra, por exemplo, enviar a lista de produtos ao backend.
+  const calculateTotalPrice = () => {
+    return cart.reduce((total, item) => {
+      return total + item.quantity * parseFloat(item.price);
+    }, 0);
   };
 
   return (
@@ -447,7 +465,7 @@ const HomeProducts: React.FC = () => {
                 <QuantityControl
                   quantity={item.quantity}
                   onIncrease={() => addToCart(item)}
-                  onDecrease={() => removeFromCart(item.quantity - 1)}
+                  onDecrease={() => decreaseFromCart(item.id)}
                 />
                 <PriceCart>{`R$ ${parseFloat(item.price).toFixed(
                   0
@@ -461,9 +479,10 @@ const HomeProducts: React.FC = () => {
         ))}
 
         <FooterSidebar>
-          <h2>Total: </h2>
+          <h2>Total:</h2>
+          <p>R$ {calculateTotalPrice()}</p>
         </FooterSidebar>
-        <CheckoutButton onClick={handleCheckout}>
+        <CheckoutButton>
           Finalizar Compra
         </CheckoutButton>
       </Sidebar>
