@@ -12,8 +12,6 @@ interface Product {
   price: number;
 }
 
-interface HomeProductsProps {}
-
 const Header = styled.header`
   background-color: #0f52ba;
   padding: 25px;
@@ -275,8 +273,8 @@ const CheckoutButton = styled.button`
   }
 `;
 
-const HomeProducts: React.FC<HomeProductsProps> = () => {
-  const [products, setProducts] = useState<Product>([]);
+const HomeProducts: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
@@ -296,7 +294,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
     fetchData();
   }, []);
 
-  const increaseQuantity = (productId) => {
+  const increaseQuantity = (productId: any) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -304,7 +302,7 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
     );
   };
   
-  const decreaseQuantity = (productId) => {
+  const decreaseQuantity = (productId: any) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.id === productId && item.quantity > 1
