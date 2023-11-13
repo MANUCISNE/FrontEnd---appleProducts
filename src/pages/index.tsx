@@ -227,7 +227,7 @@ const CartItem = styled.div`
     width: 15rem;
     justify-content: center;
     align-items: center;
-    margin: 1rem;
+    margin: 1rem 2.5rem;
     gap: 0.5rem;
   }
 `;
@@ -384,9 +384,15 @@ const HomeProducts: React.FC = () => {
 
   const decreaseFromCart = (productId: number) => {
     const updatedCart = cart.map((item: any) =>
-    item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+      item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
     );
-  setCart(updatedCart);
+
+    setCart(updatedCart);
+
+    const itemToUpdate = updatedCart.find((item: any) => item.id === productId);
+    if (itemToUpdate && itemToUpdate.quantity === 0) {
+      removeFromCart(productId);
+    }
   };
 
   const removeFromCart = (productId: number) => {
