@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import QuantityControl from "@/components/QuantityControl";
+import { isInputElement } from "react-router-dom/dist/dom";
 interface Product {
   id: number;
   name: string;
@@ -135,6 +136,7 @@ const TitlePriceContainer = styled.div`
 
   h3 {
     text-align: start;
+    font-weight: 400;
   }
 
   p {
@@ -216,6 +218,7 @@ const CartItem = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 1.3rem;
+  font-weight: 400;
 
   p {
     font-weight: 700;
@@ -299,24 +302,6 @@ const HomeProducts: React.FC = () => {
     fetchData();
   }, []);
 
-  const increaseQuantity = (productId: any) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const decreaseQuantity = (productId: any) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
-  };
-
   const addToCart = (product: any) => {
     const existingItem = cart.find((item) => item.id === product.id);
 
@@ -371,8 +356,6 @@ const HomeProducts: React.FC = () => {
                 <TitlePriceContainer>
                   <h3>{product.name}</h3>
                   <strong><p>{`R$ ${parseFloat(product.price).toFixed(0)}`}</p></strong>
-                  
-                  
                 </TitlePriceContainer>
                 <DescriptionContainer>
                   {product.description}
@@ -406,8 +389,8 @@ const HomeProducts: React.FC = () => {
 
               <QuantityControl
                 quantity={item.quantity}
-                onIncrease={() => increaseQuantity(item)}
-                onDecrease={() => decreaseQuantity(item)}
+                onIncrease={() => addToCart(item)}
+                onDecrease={() => removeFromCart(item - 1)}
               />
               <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
             </CartItem>
