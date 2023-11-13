@@ -278,8 +278,8 @@ const CloseButtonCart = styled.button`
   width: 1.14rem;
   height: 1.14rem;
   position: relative;
-  left: 28rem;
-  bottom: 8.8rem;
+  left: 27rem;
+  bottom: 8.9rem;
   border-radius: 50%;
   border: none;
   cursor: pointer;
