@@ -383,14 +383,15 @@ const HomeProducts: React.FC<HomeProductsProps> = () => {
             <CartItem>
               <ProductImageCart src={item.photo} alt={item.name} />
               <p>{item.name}</p>
-              <strong>
-                <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
-              </strong>
               <QuantityControl
                 quantity={item.quantity}
                 onIncrease={() => increaseQuantity(item)}
                 onDecrease={() => decreaseQuantity(item)}
               />
+              <strong>
+                <p>{`R$ ${parseFloat(item.price).toFixed(0)}`}</p>
+              </strong>
+
             </CartItem>
             <CloseButtonCart onClick={() => removeFromCart(item.id)}>
               X
