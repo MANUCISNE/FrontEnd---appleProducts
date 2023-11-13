@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import QuantityControl from "@/components/QuantityControl";
-import { isInputElement } from "react-router-dom/dist/dom";
 interface Product {
   id: number;
   name: string;
@@ -309,6 +308,12 @@ const FooterSidebar = styled.div`
     font-weight: 700;
     font-size: 1.4rem;
   }
+
+  @media (max-width: 375px) {
+    h2 {
+      width: 5rem;
+    }
+  }
 `;
 
 const CloseButton = styled.button`
@@ -362,18 +367,18 @@ const HomeProducts: React.FC = () => {
   }, []);
 
   const addToCart = (product: any) => {
-    const existingItem = cart.find((item) => item.id === product.id);
+    const existingItem = cart.find((item: any) => item.id === product.id);
 
     if (existingItem) {
-      setCart((prevCart) =>
-        prevCart.map((item) =>
+      setCart((prevCart: any) =>
+        prevCart.map((item: any) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
       );
     } else {
-      setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
+      setCart((prevCart: any) => [...prevCart, { ...product, quantity: 1 }]);
     }
   };
 
@@ -385,7 +390,7 @@ const HomeProducts: React.FC = () => {
   };
 
   const removeFromCart = (productId: number) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
+    const updatedCart = cart.filter((item: any) => item.id !== productId);
     setCart(updatedCart);
   };
 
@@ -394,7 +399,7 @@ const HomeProducts: React.FC = () => {
   };
 
   const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => {
+    return cart.reduce((total: any, item: any) => {
       return total + item.quantity * parseFloat(item.price);
     }, 0);
   };
@@ -418,7 +423,7 @@ const HomeProducts: React.FC = () => {
       <Body>
         <ProductContainer>
           {products.map((product: any) => (
-            <ProductColumn key={product.id}>
+            <ProductColumn key={product.id} data-testid="product-column">
               <ProductImage src={product.photo} alt={product.name} />
               <ProductInformation>
                 <TitlePriceContainer>
@@ -434,7 +439,7 @@ const HomeProducts: React.FC = () => {
 
               <ContainerButton>
                 <Image src="./shopping-bag.svg" alt="" width={16} height={16} />
-                <ButtonCard onClick={() => addToCart(product)}>
+                <ButtonCard data-testid="buy-button" onClick={() => addToCart(product)}>
                   COMPRAR
                 </ButtonCard>
               </ContainerButton>
@@ -451,7 +456,7 @@ const HomeProducts: React.FC = () => {
           <CloseButton onClick={() => setIsSidebarOpen(false)}>X</CloseButton>
         </HeaderSidebar>
 
-        {cart.map((item, index) => (
+        {cart.map((item: any, index: any) => (
           <div key={index}>
             <CartItem>
               <ProductImageCart
